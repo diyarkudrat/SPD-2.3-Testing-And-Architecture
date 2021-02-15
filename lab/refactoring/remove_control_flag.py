@@ -2,7 +2,7 @@
 # Remove control flag
 def find_food(food, fridge):
     for item in fridge:
-        if food in item:
+        if food == item:
             return food
 
     return None
