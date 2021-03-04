@@ -182,22 +182,16 @@ class WeatherStation:
         # ForecastDisplay class. Also register them to the concerete instance
         # of the Subject class so the they get the measurements' updates.
 
-        # The StatisticsDisplay class should keep track of the min/average/max
-        # measurements and display them.
-
-        # The ForecastDisplay class shows the weather forcast based on the current
-        # temperature, humidity and pressure. Use the following formuals :
-        # forcast_temp = temperature + 0.11 * humidity + 0.2 * pressure
-        # forcast_humadity = humidity - 0.9 * humidity
-        # forcast_pressure = pressure + 0.1 * temperature - 0.21 * pressure
+        stats_display = StatisticsDisplay(weather_data)
+        forecast_display = ForecastDisplay(weather_data)
 
         weather_data.setMeasurements(80, 65, 30.4)
         weather_data.setMeasurements(82, 70, 29.2)
         weather_data.setMeasurements(78, 90, 29.2)
 
         # un-register the observer
-        weather_data.removeObserver(current_display)
-        weather_data.setMeasurements(120, 100, 1000)
+        weather_data.remove_observer(current_display)
+        weather_data.set_measurements(120, 100, 1000)
 
 
 if __name__ == "__main__":
