@@ -28,22 +28,23 @@ def drawBoard(board):
 
 
 def inputPlayerLetter():
-    # Lets the player type which letter they want to be.
-    # Returns a list with the player’s letter as the first item, and the computer's letter as the second.
-    letter = ''
-    while not (letter == 'X' or letter == 'O'):
-        print('Do you want to be X or O?')
+    """Lets the player type which letter they want to be.
+       Returns a list with the player’s letter as the first item, 
+       and the computer's letter as the second."""
+    letter = ""
+    while not (letter == "X" or letter == "O"):
+        print("Do you want to be X or O?")
         letter = input().upper()
 
-    # the first element in the list is the player’s letter, the second is the computer's letter.
-    if letter == 'X':
-        return ['X', 'O']
+    # first element => the player’s letter, second element => the computer's letter.
+    if letter == "X":
+        return ["X", "O"]
     else:
-        return ['O', 'X']
+        return ["O", "X"]
 
 
 def whoGoesFirst():
-    # Randomly choose the player who goes first.
+    """Randomly choose the player who goes first."""
     if random.randint(0, 1) == 0:
         return 'computer'
     else:
@@ -51,18 +52,22 @@ def whoGoesFirst():
 
 
 def playAgain():
-    # This function returns True if the player wants to play again, otherwise it returns False.
+    """This function returns True if the player wants to play again, otherwise it returns False."""
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
 
 
 def makeMove(board, letter, move):
+    """Insert input letter into the board."""
     board[move] = letter
 
 
 def isWinner(bo, le):
-    # Given a board and a player’s letter, this function returns True if that player has won.
-    # We use bo instead of board and le instead of letter so we don’t have to type as much.
+    """Given a board and a player’s letter, 
+    this function returns True if that player has won.
+
+    We use bo instead of board and le instead of letter 
+    so we don’t have to type as much."""
     return ((bo[7] == le and bo[8] == le and bo[9] == le) or  # across the top
             # across the middle    # TODO: Fix the indentation of this lines and the following ones.
             (bo[4] == le and bo[5] == le and bo[6] == le) or
@@ -76,7 +81,7 @@ def isWinner(bo, le):
 
 
 def getBoardCopy(board):
-    # Make a duplicate of the board list and return it the duplicate.
+    """Make a duplicate of the board list and return it the duplicate."""
     dupeBoard = []
 
     for i in range(0, len(board)):  # TODO: Clean this mess!
@@ -86,12 +91,12 @@ def getBoardCopy(board):
 
 
 def isSpaceFree(board, move):
-    # Return true if the passed move is free on the passed board.
+    """Return true if the passed move is free on the passed board."""
     return board[move] == ' '
 
 
 def getPlayerMove(board):
-    # Let the player type in their move.
+    """Let the player type in their move."""
     move = ' '  # TODO: W0621: Redefining name 'move' from outer scope. Hint: Fix it according to https://stackoverflow.com/a/25000042/81306
     while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
         print('What is your next move? (1-9)')
@@ -100,8 +105,8 @@ def getPlayerMove(board):
 
 
 def chooseRandomMoveFromList(board, movesList):
-    # Returns a valid move from the passed list on the passed board.
-    # Returns None if there is no valid move.
+    """Returns a valid move from the passed list on the passed board.
+    Returns None if there is no valid move."""
     possibleMoves = []
     for i in movesList:
         if isSpaceFree(board, i):
@@ -115,7 +120,7 @@ def chooseRandomMoveFromList(board, movesList):
 
 # TODO: W0621: Redefining name 'computerLetter' from outer scope. Hint: Fix it according to https://stackoverflow.com/a/25000042/81306
 def getComputerMove(board, computerLetter):
-    # Given a board and the computer's letter, determine where to move and return that move.
+    """Given a board and the computer's letter, determine where to move and return that move."""
     if computerLetter == 'X':
         playerLetter = 'O'
     else:
@@ -152,7 +157,8 @@ def getComputerMove(board, computerLetter):
 
 
 def isBoardFull(board):
-    # Return True if every space on the board has been taken. Otherwise return False.
+    """Return True if every space on the board has been taken. 
+    Otherwise return False."""
     for i in range(1, 10):
         if isSpaceFree(board, i):
             return False
