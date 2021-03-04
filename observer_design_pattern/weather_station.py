@@ -89,7 +89,7 @@ class CurrentConditionsDisplay(Observer):
 
 
 class StatisticsDisplay:
-    """The StatisticsDisplay class keeps track of the min/max/average measurements and display time."""
+    """Keeps track of the min/max/average measurements and display time."""
 
     def __init__(self, weather_data):
         self.temps = []
@@ -148,6 +148,29 @@ class StatisticsDisplay:
             pressure_message = "No Pressure Stats"
 
         print(pressure_message)
+
+
+class ForecastDisplay(Observer):
+    """Shows the weather forecast based on the current temperature, humidity and pressure."""
+
+    def __init__(self, weather_data):
+        self.forecast_temp = 0
+        self.forecast_humidity = 0
+        self.forecast_pressure = 0
+
+        self.weather_data = weather_data
+        weather_data.register_observer(self)
+
+    def update(self, temp, humidity, pressure):
+        self.forecast_temp = temp + 0.11 * humidity + 0.2 * pressure
+        self.forecast_humidity = humidity - 0.9 * humidity
+        self.forecast_pressure = pressure + 0.1 * temperature - 0.21 * pressure
+
+    def display(self):
+        print("Forecase Conditions: ")
+        print(self.forecast_temp, "F degrees and ")
+        print(self.forecast_humidity, "[%] humidity and ")
+        print(self.forecast_pressure, "pressure")
 
 
 class WeatherStation:
