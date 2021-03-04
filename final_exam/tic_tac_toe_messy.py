@@ -68,39 +68,61 @@ def isWinner(bo, le):
     We use bo instead of board and le instead of letter 
     so we don’t have to type as much."""
 
-    return ((bo[7] == le and bo[8] == le and bo[9] == le) or  # across the top
-            # across the middle    # TODO: Fix the indentation of this lines and the following ones.
-            (bo[4] == le and bo[5] == le and bo[6] == le) or
-            (bo[1] == le and bo[2] == le and bo[3] == le) or  # across the bottom
-            (bo[7] == le and bo[4] == le and bo[1] == le) or  # down the left side
-            (bo[8] == le and bo[5] == le and bo[2] == le) or  # down the middle
-            # down the right side
-            (bo[9] == le and bo[6] == le and bo[3] == le) or
-            (bo[7] == le and bo[5] == le and bo[3] == le) or  # diagonal
-            (bo[9] == le and bo[5] == le and bo[1] == le))  # diagonal
+    def isWinnerRow(winningSeq):
+        """Check each row to see if player has won."""
+        for i in range(1, TOTAL_BOXES, BOARD_LENGTH):
+            row = bo[i:i + BOARD_LENGTH]
+            if row == winningSeq:
+                return True
+
+        return False
+
+    def isWinnerCol(winningSeq):
+        """Check each column to see if player has won."""
+        # loop through each column to get the first val
+        for start in range(1, BOARD_LENGTH + 1):
+            columns = []
+            for i in range(start, TOTAL_BOXES, BOARD_LENGTH):
+                columns.append(bo[i])
+
+            if columns == winningSeq:
+                return True
+
+            return False
+
+    def isWinnerDiagonal(winningSeq):
+        """Check diagonals to see if player has won."""
+        diagonal1 = [bo[i] for i in range(1, TOTAL_BOXES, BOARD_LENGTH + 1)]
+        diagonal2 = [bo[i]
+                     for i in range(BOARD_LENGTH, TOTAL_BOXES, BOARD_LENGTH - 1)]
+
+        if winningSeq == diagonal1 or winningSeq == diagonal2:
+            return True
+
+        return False
+
+    winningSeq = [le for block in range(BOARD_LENGTH)]
+    return isWinnerRow(winningSeq) or isWinnerCol(winningSeq) or isWinnerDiagonal(winningSeq)
 
 
 def getBoardCopy(board):
     """Make a duplicate of the board list and return it the duplicate."""
-    dupeBoard = []
-
-    for i in range(0, len(board)):  # TODO: Clean this mess!
-        dupeBoard.append(board[i])
-
-    return dupeBoard
+    return [value for value in board]
 
 
 def isSpaceFree(board, move):
     """Return true if the passed move is free on the passed board."""
-    return board[move] == ' '
+    return board[move] == " "
 
 
 def getPlayerMove(board):
     """Let the player type in their move."""
-    move = ' '  # TODO: W0621: Redefining name 'move' from outer scope. Hint: Fix it according to https://stackoverflow.com/a/25000042/81306
-    while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
+    move = None
+    moves = set(str(num) for num in range(1, len(board) + 1))
+    while move not in moves or not isSpaceFree(board, int(move)):
         print('What is your next move? (1-9)')
         move = input()
+
     return int(move)
 
 
@@ -112,23 +134,22 @@ def chooseRandomMoveFromList(board, movesList):
         if isSpaceFree(board, i):
             possibleMoves.append(i)
 
-    if len(possibleMoves) != 0:  # TODO: How would you write this pythanically? (You can google for it!)
+    if possibleMoves:
         return random.choice(possibleMoves)
-    else:  # TODO: is this 'else' necessary?
-        return None
+
+    return None
 
 
-# TODO: W0621: Redefining name 'computerLetter' from outer scope. Hint: Fix it according to https://stackoverflow.com/a/25000042/81306
 def getComputerMove(board, computerLetter):
     """Given a board and the computer's letter, determine where to move and return that move."""
-    if computerLetter == 'X':
-        playerLetter = 'O'
+    if computerLetter == "X":
+        playerLetter = "O"
     else:
-        playerLetter = 'X'
+        playerLetter = "X"
 
     # Here is our algorithm for our Tic Tac Toe AI:
     # First, check if we can win in the next move
-    for i in range(1, 10):
+    for i in range(1, TOTAL_BOXES + 1):
         copy = getBoardCopy(board)
         if isSpaceFree(copy, i):
             makeMove(copy, computerLetter, i)
@@ -136,7 +157,7 @@ def getComputerMove(board, computerLetter):
                 return i
 
     # Check if the player could win on their next move, and block them.
-    for i in range(1, 10):
+    for i in range(1, TOTAL_BOXES + 1):
         copy = getBoardCopy(board)
         if isSpaceFree(copy, i):
             makeMove(copy, playerLetter, i)
